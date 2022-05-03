@@ -10,7 +10,7 @@ Razvojna okolina prilagođena je razvoju u kontejnerima. Za razvoj se koristiti 
 
 ### Priprema kontejnerske okoline
 
-Za razvoj se koriste kontejneri i docker. Da bi se uspostavila razvojna okolina potrebno je instalirati docker ili sličan kontejnerski sustav. Ovdje je **važno** napomenuti da nije podržana snap verzija dockera zbog nemogućnosti pristupa [home direktoriju]([extension does not work with snap version of docker · Issue #2817 · microsoft/vscode-remote-release · GitHub](https://github.com/microsoft/vscode-remote-release/issues/2817)). Docker dolazi s početno definiranim opsegom mreža /16 što je previše za razvojnu okolinu te je preporuka da istu smanjimo na /24. Na linux sustavima treba kreirati ili urediti datoteku /etc/docker/daemon.json u kome će se postaviti željeni mrežni raspon.
+Za razvoj se koriste kontejneri i docker. Da bi se uspostavila razvojna okolina potrebno je instalirati docker ili sličan kontejnerski sustav. Ovdje je **važno** napomenuti da nije podržana snap verzija dockera zbog nemogućnosti pristupa [home direktoriju](https://github.com/microsoft/vscode-remote-release/issues/2817). Docker dolazi s početno definiranim opsegom mreža /16 što je previše za razvojnu okolinu te je preporuka da istu smanjimo na /24. Na linux sustavima treba kreirati ili urediti datoteku /etc/docker/daemon.json u kome će se postaviti željeni mrežni raspon.
 
 ```shell
 # vi /etc/docker/daemon.json

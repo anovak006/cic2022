@@ -68,3 +68,15 @@ $ curl -SL https://github.com/docker/compose/releases/download/v2.4.1/docker-com
 $ git checkout b6886455799
 ```
 ---
+# Visual Studio Code - remote plugin
+![alt](https://code.visualstudio.com/assets/docs/remote/containers/architecture-containers.png)
+
+---
+# Podesiti remote plugin
+Urediti potrebne postavke u datoteci `.devcontainer/devcontainer.json`
+
+### Ostale postavke VS Code
+Nalaze se u dirketoriju `.vscode`
+
+<!-- footer: `git checkout `-->
+
