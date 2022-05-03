@@ -58,10 +58,9 @@ $ curl -SL https://github.com/docker/compose/releases/download/v2.4.1/docker-com
  $ sudo chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
  ```
 ---
-# Postavimo Python razvojnu okolinu
+# Preuzmimo projektnu razvojnu okolinu
 ```shell
 > git clone https://github.com/anovak006/cic2022.git
-> python3 -m venv venv
 ```
 ## I vratimo se na početak
 ```shell
@@ -78,5 +77,29 @@ Urediti potrebne postavke u datoteci `.devcontainer/devcontainer.json`
 ### Ostale postavke VS Code
 Nalaze se u dirketoriju `.vscode`
 
-<!-- footer: `git checkout `-->
+<!-- footer: `git checkout 096a2076cdc`-->
+---
+# Slojevi slike kontejnera
+![alt](https://cdn.buttercms.com/CLQJN3yRRcS7oGqm7yKb)
+Izvor: https://www.metricfire.com/blog/how-to-build-optimal-docker-images/
 
+---
+# Višestupanjska (multi-stage) slika kontejnera
+![alt](https://cdn.buttercms.com/PpIR4HUFTuSMirdt5pxC)
+Izvor: https://www.metricfire.com/blog/how-to-build-optimal-docker-images/
+
+---
+# Priprema kontejnera
+
+## Kroz terminal
+```shell
+# Napravi novi kontejner
+$ docker build -t cic2022:latest -f Dockerfile.cic2022 .
+# Napravi novi kontejner specifičnog stupnja (stage)
+$ docker build --target cic2022-dev -t cic2022-dev:latest -f Dockerfile.cic2022 .
+```
+
+## Kroz VS Code
+
+<!-- footer: `git checkout `-->
+---

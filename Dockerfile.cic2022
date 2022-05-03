@@ -1,0 +1,119 @@
+# pull official base image
+FROM python:3.10-slim-bullseye AS cic2022-build
+
+COPY upgrade-packages.sh .
+RUN ./upgrade-packages.sh
+
+ARG USERNAME=vscode
+ARG USER_UID=1000
+ARG USER_GID=$USER_UID
+
+
+# set work directory
+WORKDIR /usr/src/app
+
+# set environment variables
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+## virtualenv
+ENV VIRTUAL_ENV=/opt/venv
+RUN python3 -m venv $VIRTUAL_ENV
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+
+# install dependencies
+RUN set -eux \
+    # Create a non-root user to use if preferred - see https://aka.ms/vscode-remote/containers/non-root-user.
+    # Alpine
+    # && addgroup --gid $USER_GID -S $USERNAME \
+    # && adduser -u $USER_UID -S $USERNAME -G $USERNAME \
+    # Debian
+    && groupadd --gid $USER_GID $USERNAME \
+    && useradd -s /bin/bash --uid $USER_UID --gid $USER_GID -m $USERNAME \
+    && pip install --upgrade pip setuptools wheel pip-tools
+
+## add and install requirements
+COPY ./requirements.txt .
+RUN pip install -r requirements.txt \
+    && rm -rf /root/.cache/pip
+
+FROM python:3.10-slim-bullseye AS cic2022-dev
+
+COPY upgrade-packages.sh install-packages.sh ./
+RUN ./upgrade-packages.sh && \
+    ./install-packages.sh
+
+ARG USERNAME=vscode
+ARG USER_UID=1000
+ARG USER_GID=$USER_UID
+
+# set work directory
+WORKDIR /usr/src/app
+
+# set environment variables
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+## virtualenv
+ENV VIRTUAL_ENV=/opt/venv
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+
+
+# copy application
+COPY --from=cic2022-build $VIRTUAL_ENV $VIRTUAL_ENV
+
+# copy dev environment
+COPY ./requirements-dev.in . 
+RUN pip-compile requirements-dev.in > requirements-dev.txt \
+    && pip install -r requirements-dev.txt \
+    && rm -rf /root/.cache/pip
+
+# Create a non-root user to use if preferred - see https://aka.ms/vscode-remote/containers/non-root-user.
+RUN set -eux \
+    && groupadd --gid $USER_GID $USERNAME \
+    && useradd -s /bin/bash --uid $USER_UID --gid $USER_GID -m $USERNAME \
+    && chown -R ${USER_UID}:${USER_GID} ./ \
+    && chown -R ${USER_UID}:${USER_GID} ${VIRTUAL_ENV} \
+    && rm /etc/localtime \
+    && ln -s /usr/share/zoneinfo/Europe/Zagreb /etc/localtime
+
+
+USER $USERNAME
+
+
+FROM python:3.10-slim-bullseye AS cic2022
+
+COPY upgrade-packages.sh .
+RUN ./upgrade-packages.sh
+
+ARG USERNAME=evidence
+ARG USER_UID=1000
+ARG USER_GID=$USER_UID
+
+# set work directory
+WORKDIR /usr/src/app
+
+## virtualenv
+ENV VIRTUAL_ENV=/opt/venv
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+
+# copy requirements
+COPY --from=cic2022-build $VIRTUAL_ENV $VIRTUAL_ENV
+
+# copy project
+COPY ./cic2022 /usr/src/app/cic2022
+
+# Create a non-root user to use if preferred - see https://aka.ms/vscode-remote/containers/non-root-user.
+RUN set -eux \
+    && groupadd --gid $USER_GID $USERNAME \
+    && useradd -s /bin/bash --uid $USER_UID --gid $USER_GID -m $USERNAME \
+    && chown -R ${USER_UID}:${USER_GID} ./ \
+    && chown -R ${USER_UID}:${USER_GID} ${VIRTUAL_ENV} \
+    && rm /etc/localtime \
+    && ln -s /usr/share/zoneinfo/Europe/Zagreb /etc/localtime
+
+USER $USERNAME
+
+#run server
+# CMD uvicorn e2vidence.main:app --reload --workers 1 --host 0.0.0.0 --port 8000 --proxy-headers
+CMD gunicorn cic2022.main:app --workers 4 --worker-class uvicorn.workers.UvicornWorker --bind 0.0.0.0:8000  --log-level info --access-logfile -

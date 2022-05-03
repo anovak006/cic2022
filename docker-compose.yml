@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  # traefik:
+  #   image: "traefik:v2.2"
+  #   container_name: "traefik"
+  #   command:
+  #     #- "--log.level=DEBUG"
+  #     - "--api.insecure=true"
+  #     - "--providers.docker=true"
+  #     - "--providers.docker.exposedbydefault=false"
+  #     - "--entrypoints.web.address=:80"
+  #   ports:
+  #     - "80:80"
+  #     - "8080:8080"
+  #     # - "443:443"
+  #   volumes:
+  #     - "/var/run/docker.sock:/var/run/docker.sock:ro"
+
+  app:
+    build: 
+      context: .
+      dockerfile: Dockerfile.cic2022
+      target: cic2022-dev
+    # network_mode: "bridge"
+    # user: vscode
+    command: sleep infinity
+    # command: uvicorn cic2022.main:app --reload --workers 1 --host 0.0.0.0 --port 8000 --proxy-headers
+    volumes:
+      - .:/usr/src/app/
+    ports:
+      - 8000:8000
+    environment:
+      - DEBUG=false
+      - DEBUGGER=CIC2022
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.middlewares.cic2022_https.redirectscheme.scheme=https"
+      - "traefik.http.routers.cic2022.entrypoints=http"
+      - "traefik.http.routers.cic2022.rule=Host(`cic2022.carnet.hr`)"
+      - "traefik.http.routers.cic2022.middlewares=cic2022_https@docker"
+      - "traefik.http.routers.cic2022_https.rule=Host(`cic2022.carnet.hr`)"
+      - "traefik.http.routers.cic2022_https.tls=true"
+      - "traefik.http.routers.cic2022_https.entrypoints=https"
+      - "traefik.frontend.passHostHeader: true"
+      
+    networks:
+      - proxy
+
+networks:
+  proxy:
+    external: true
+    
+
