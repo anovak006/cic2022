@@ -101,5 +101,12 @@ $ docker build --target cic2022-dev -t cic2022-dev:latest -f Dockerfile.cic2022 
 
 ## Kroz VS Code
 
-<!-- footer: `git checkout `-->
+F1 pa odabrati `Remote-Containers: Rebuild and Reopen in Container `
+Izvor: https://code.visualstudio.com/docs/remote/create-dev-container
+
+<!-- footer: `git checkout b52d22a9755`-->
 ---
+# FastAPI - REST API u par linija koda
+![HTTP Methods](https://ws.apms.io/api/_files/WScS4PCt2atRRbGB8YUCE8/download/)
+Izvor: https://appmaster.io/blog/what-rest-api-and-how-it-differs-other-types
+<!-- footer: `git checkout `-->
