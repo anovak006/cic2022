@@ -115,7 +115,7 @@ Izvor: https://appmaster.io/blog/what-rest-api-and-how-it-differs-other-types
 # I malo složeniji primjer s elementima CRUD-a
 ## Dodat ćemo i jedan FastAPI router da bude zanimljivije
 
-<!-- footer: `git checkout `-->
+<!-- footer: `git checkout 3b99c73f3cc`-->
 
 ---
 # Naglasci
