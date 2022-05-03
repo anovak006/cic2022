@@ -106,7 +106,31 @@ Izvor: https://code.visualstudio.com/docs/remote/create-dev-container
 
 <!-- footer: `git checkout b52d22a9755`-->
 ---
-# FastAPI - REST API u par linija koda
+# FastAPI - RESTful API u par linija koda
 ![HTTP Methods](https://ws.apms.io/api/_files/WScS4PCt2atRRbGB8YUCE8/download/)
 Izvor: https://appmaster.io/blog/what-rest-api-and-how-it-differs-other-types
+<!-- footer: `git checkout c3053a403a9`-->
+
+---
+# I malo složeniji primjer s elementima CRUD-a
+## Dodat ćemo i jedan FastAPI router da bude zanimljivije
+
 <!-- footer: `git checkout `-->
+
+---
+# Naglasci
+- Sav kod možemo izvršavati u kontejneru potpuno izoliran
+- VS Code Remote-Containers omogućava nam jednostavno debugiranje
+- Multi-stage kod izrade slike kontejnera omogućava nam uštede resursa u produkciji
+- FastAPI omogućava nam brz razvoj dokumentiranog API-a s validacijom ulaznih podataka
+
+<!-- footer: ''-->
+---
+# Post-credits
+---
+![VS Code Remote Containers arhitecture](https://code.visualstudio.com/assets/docs/remote/containers/architecture-containers.png)
+Izvor: https://code.visualstudio.com/docs/remote/containers
+
+---
+![Traefik architecture w:860](https://traefik.io/static/83ea42c9e8101dcf2a16f380fe3aac08/053ba/diagram.webp)
+Izvor: https://traefik.io/traefik/
